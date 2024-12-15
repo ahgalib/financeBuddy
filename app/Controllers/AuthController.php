@@ -34,6 +34,7 @@ class AuthController {
                     'email' => $user_data['email'],
                 ];
 
+            
                 // Redirect to home page
                 header("Location: /financebuddy/home");
                 exit;

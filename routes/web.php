@@ -4,7 +4,9 @@
 use App\Controllers\HomeController;
 use App\Controllers\AuthController;
 use App\Controllers\ExpenseController;
+use App\Middleware\AuthMiddleware;
 
+// require_once __DIR__ . '/../app/Middleware/Middleware.php';  
 // // Normalize the URI by removing the base path (financebuddy/public/index.php)
 // $basePath = '/financebuddy';
 // $uri = str_replace($basePath, '', $_SERVER['REQUEST_URI']);
@@ -36,7 +38,8 @@ $routes = [
     ['method' => 'GET', 'uri' => 'login', 'action' => [AuthController::class, 'index']],
     ['method' => 'POST', 'uri' => 'login', 'action' => [AuthController::class, 'authenticate']],
     ['method' => 'GET', 'uri' => 'dashboard', 'action' => [ExpenseController::class, 'dashboard']],
-    ['method' => 'GET', 'uri' => 'add-expense', 'action' => [ExpenseController::class, 'expense']],
+    ['method' => 'GET', 'uri' => 'add-expense', 'action' => [ExpenseController::class, 'expense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
+    ['method' => 'POST', 'uri' => 'save-expense', 'action' => [ExpenseController::class, 'addExpense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
 ];
 
 // $routes = [
@@ -66,6 +69,13 @@ foreach ($routes as $route) {
     if (preg_match("#^$pattern$#", $uri, $matches)) {
        
         array_shift($matches); // Remove the full match
+        if(isset($route['middleware'])){
+            echo "middleware is exits and no premission granted";
+            $middlewareClass =  $route['middleware'];
+            $middleware = new $middlewareClass();
+            $middleware->handle();
+            // die;
+        }
         [$controller, $method] = $route['action'];
         $controllerInstance = new $controller();
         echo call_user_func_array([$controllerInstance, $method], $matches);
