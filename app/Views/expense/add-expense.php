@@ -31,11 +31,11 @@
             <form action="/financebuddy/save-expense" method="POST">
                 <div class="mb-3">
                     <label for="amount" class="form-label">Amount</label>
-                    <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+                    <input type="number" step="0.01" class="form-control" id="amount" name="amount">
                 </div>
                 <div class="mb-3">
                     <label for="category" class="form-label">Category</label>
-                    <select class="form-control" id="category" name="category" required>
+                    <select class="form-control" id="category" name="category">
                         <option value="Food">Food</option>
                         <option value="Rent">Rent</option>
                         <option value="Utilities">Utilities</option>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="date" class="form-label">Date</label>
-                    <input type="date" class="form-control" id="date" name="date" required>
+                    <input type="date" class="form-control" id="date" name="date">
                 </div>
                 <div class="mb-3">
                     <label for="notes" class="form-label">Notes</label>

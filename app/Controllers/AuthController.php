@@ -36,7 +36,7 @@ class AuthController {
 
             
                 // Redirect to home page
-                header("Location: /financebuddy/home");
+                header("Location: /financebuddy/add-expense");
                 exit;
             }
 
@@ -49,6 +49,13 @@ class AuthController {
         $_SESSION['error'] = $message;
         header("Location: /financebuddy/login");
         exit;
+    }
+
+    public function logout(){
+        if (isset($_SESSION['user'])) {
+            session_destroy();
+            header("Location: /financebuddy/login");
+        }
     }
 
 

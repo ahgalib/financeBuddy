@@ -22,6 +22,7 @@ function view($path, $data = [])
 
         require_once __DIR__ . '/../Views/layouts/main.php';
     }else{
+        extract($data); 
         require_once __DIR__ . "/../Views/$path.php"; 
     }
 }

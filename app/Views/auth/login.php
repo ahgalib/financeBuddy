@@ -76,7 +76,7 @@
                             </div>
 
                             <?php
-                                session_start();
+                                // session_start();
                                 if (isset($_SESSION['error'])) {
                                     echo "<p style='color: red;'>" . $_SESSION['error'] . "</p>";
                                 }

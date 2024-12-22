@@ -35,11 +35,13 @@ use App\Middleware\AuthMiddleware;
 // ];
 
 $routes = [
-    ['method' => 'GET', 'uri' => 'login', 'action' => [AuthController::class, 'index']],
+    ['method' => 'GET', 'uri' => 'login', 'action' => [AuthController::class, 'index'], 'middleware' => \App\Middleware\LoginMiddleware::class],
     ['method' => 'POST', 'uri' => 'login', 'action' => [AuthController::class, 'authenticate']],
+    ['method' => 'GET', 'uri' => 'logout', 'action' => [AuthController::class, 'logout'], 'middleware' => \App\Middleware\LoginMiddleware::class],
     ['method' => 'GET', 'uri' => 'dashboard', 'action' => [ExpenseController::class, 'dashboard']],
     ['method' => 'GET', 'uri' => 'add-expense', 'action' => [ExpenseController::class, 'expense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
     ['method' => 'POST', 'uri' => 'save-expense', 'action' => [ExpenseController::class, 'addExpense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
+    ['method' => 'GET', 'uri' => 'show-expense', 'action' => [ExpenseController::class, 'showExpense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
 ];
 
 // $routes = [
@@ -64,18 +66,19 @@ foreach ($routes as $route) {
         continue;
     }
    
-    $pattern = preg_replace('/\{[a-z]+\}/', '([a-zA-Z0-9-_]+)', $route['uri']); // Convert {id} to a regex pattern
- 
+    // Convert {id} to a regex pattern
+    $pattern = preg_replace('/\{[a-z]+\}/', '([a-zA-Z0-9-_]+)', $route['uri']); 
     if (preg_match("#^$pattern$#", $uri, $matches)) {
        
         array_shift($matches); // Remove the full match
+
+        //check the route is middleware protected or not
         if(isset($route['middleware'])){
-            echo "middleware is exits and no premission granted";
             $middlewareClass =  $route['middleware'];
             $middleware = new $middlewareClass();
-            $middleware->handle();
-            // die;
+            $middleware->handle();         
         }
+
         [$controller, $method] = $route['action'];
         $controllerInstance = new $controller();
         echo call_user_func_array([$controllerInstance, $method], $matches);
