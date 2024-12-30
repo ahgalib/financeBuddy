@@ -42,6 +42,11 @@ $routes = [
     ['method' => 'GET', 'uri' => 'add-expense', 'action' => [ExpenseController::class, 'expense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
     ['method' => 'POST', 'uri' => 'save-expense', 'action' => [ExpenseController::class, 'addExpense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
     ['method' => 'GET', 'uri' => 'show-expense', 'action' => [ExpenseController::class, 'showExpense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
+
+
+    ['method' => 'GET', 'uri' => 'edit-expense/{id}', 'action' => [ExpenseController::class, 'editExpense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
+
+    ['method' => 'POST', 'uri' => 'update-expense/{id}', 'action' => [ExpenseController::class, 'updateExpense'], 'middleware' => \App\Middleware\AuthMiddleware::class],
 ];
 
 // $routes = [
@@ -69,7 +74,6 @@ foreach ($routes as $route) {
     // Convert {id} to a regex pattern
     $pattern = preg_replace('/\{[a-z]+\}/', '([a-zA-Z0-9-_]+)', $route['uri']); 
     if (preg_match("#^$pattern$#", $uri, $matches)) {
-       
         array_shift($matches); // Remove the full match
 
         //check the route is middleware protected or not
@@ -78,6 +82,7 @@ foreach ($routes as $route) {
             $middleware = new $middlewareClass();
             $middleware->handle();         
         }
+
 
         [$controller, $method] = $route['action'];
         $controllerInstance = new $controller();

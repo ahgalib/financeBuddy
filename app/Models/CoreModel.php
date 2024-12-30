@@ -71,4 +71,17 @@ class CoreModel {
 
         return $stmt->execute($data);
     }
+
+    public function update(string $table, array $data, $id)
+    {
+        $columns = implode(', ', array_map(fn($key) => "$key = :$key", array_keys($data)));
+        $query = "UPDATE $table SET $columns WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+
+        // Bind ID parameter
+        $data['id'] = $id;
+
+        return $stmt->execute($data);
+    }
+
 }

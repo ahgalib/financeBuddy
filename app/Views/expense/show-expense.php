@@ -18,12 +18,9 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
+    <main class="container mx-auto vh-full px-4 py-6">
         <h2 class="text-xl font-semibold mb-4">All Expenses</h2>
 
-        <?php
-        echo "<pre>";print_r($expense_data);
-        ?>
         <!-- Filter Section -->
         <div class="mb-6">
             <form method="GET" action="/expenses">
@@ -61,24 +58,36 @@
                         <th class="px-4 py-2 text-left">Amount</th>
                         <th class="px-4 py-2 text-left">Type</th>
                         <th class="px-4 py-2 text-left">Category</th>
+                        <th class="px-4 py-2 text-left">Edit</th>
+                        <th class="px-4 py-2 text-left">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Sample Row (Replace with dynamic PHP loop) -->
-                    <tr class="border-b">
-                        <td class="px-4 py-2">2024-12-01</td>
-                        <td class="px-4 py-2">House Rent</td>
-                        <td class="px-4 py-2">$500</td>
-                        <td class="px-4 py-2">Recurring</td>
-                        <td class="px-4 py-2">Rent</td>
-                    </tr>
-                    <tr class="border-b bg-gray-50">
-                        <td class="px-4 py-2">2024-12-05</td>
-                        <td class="px-4 py-2">Groceries</td>
-                        <td class="px-4 py-2">$120</td>
-                        <td class="px-4 py-2">One-Time</td>
-                        <td class="px-4 py-2">Food</td>
-                    </tr>
+                    <?php
+                    foreach ($expense_data as $expense) {
+                    ?>
+                        <tr class="border-b">
+                            <td class="px-4 py-2">23 Dec, 2024</td>
+                            <td class="px-4 py-2"><?php echo $expense['notes'] ?></td>
+                            <td class="px-4 py-2"><?php echo $expense['amount'] ?></td>
+                            <td class="px-4 py-2"><?php echo $expense['is_recurring'] == 1 ? 'Recurring' : 'One Time' ?></td>
+                            <td class="px-4 py-2">Rent</td>
+
+                            <td class="border px-4 py-2">
+                                <a href="/financebuddy/edit-expense/<?php echo $expense['id'] ?>" class="bg-yellow-500 text-white px-2 py-1 rounded-md">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                            </td>
+                            <td class="border px-4 py-2">
+                                <form method="POST" action="/expenses/delete/1" onsubmit="return confirm('Are you sure you want to delete this expense?');">
+                                    <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded-md">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>

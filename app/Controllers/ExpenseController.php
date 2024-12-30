@@ -79,7 +79,63 @@ class ExpenseController{
 
         );
 
-        header("Location: /financebuddy/dashboard");
+        header("Location: /financebuddy/show-expense");
         
     }
+
+    // Show the edit form with current expense details
+    public function editExpense($id)
+    {
+        $expenseModel = new Expense();
+        $expense = $expenseModel->find('add_expense', $id);
+
+        if (!$expense) {
+            die('Expense not found.');
+        }
+
+        return view('expense/edit-expense', ['expense' => $expense]);
+    }
+
+    // Update the expense
+    public function updateExpense($id)
+    {
+        // echo $id;die;
+        $expenseModel = new Expense();
+        $validation = new Validator();
+
+        $data = [
+            'category_id' => $_POST['category_id'],
+            'amount' => $_POST['amount'],
+            'date' => $_POST['date'],
+            'notes' => $_POST['notes'],
+            'is_recurring' => isset($_POST['is_recurring']) ? 1 : 0,
+            'frequency' => $_POST['frequency'] ?? null,
+        ];
+
+        // Validate input data
+        if (!$validation->validatior($data, [
+            'category_id' => 'required',
+            'amount' => 'required',
+            'date' => 'required|date',
+            'notes' => 'nullable|string',
+            'is_recurring' => 'boolean',
+            'frequency' => 'nullable|string',
+        ])) {
+            $errors = $validation->errors;
+            print_r($errors); // Handle validation errors properly.
+            return;
+        }
+
+        // Update expense in the database
+        $updated = $expenseModel->update('add_expense', $data, $id);
+
+        if ($updated) {
+            header("Location: /financebuddy/show-expense");
+        } else {
+            die('Failed to update expense.');
+        }
+    }
+    
+
+
 }

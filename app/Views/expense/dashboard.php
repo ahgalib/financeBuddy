@@ -48,6 +48,9 @@
         <div class="mt-5 text-center">
             <a href="/financebuddy/add-expense" class="btn btn-primary">Add New Expense</a>
         </div>
+        <div class="mt-5 text-center">
+            <a href="/financebuddy/show-expense" class="btn btn-primary">Show All Expenses</a>
+        </div>
     </div>
 </body>
 
